@@ -1,7 +1,7 @@
 import React from "react";
 import "./Game.css";
 
-const CELL_SIZE = 20;
+const CELL_SIZE = 3;
 const WIDTH = 1200;
 const HEIGHT = 600;
 
@@ -29,156 +29,9 @@ class Game extends React.Component {
     saveCells = this.makeCells();
     console.log(saveCells);
   };
-  preset1=()=> {
-
-    
-    let preset = [
-        {
-          x: 27,
-          y: 7,
-        },
-        {
-          x: 25,
-          y: 8,
-        },
-        {
-          x: 27,
-          y: 8,
-        },
-        {
-          x: 15,
-          y: 9,
-        },
-        {
-          x: 16,
-          y: 9,
-        },
-        {
-          x: 23,
-          y: 9,
-        },
-        {
-          x: 24,
-          y: 9,
-        },
-        {
-          x: 37,
-          y: 9,
-        },
-        {
-          x: 38,
-          y: 9,
-        },
-        {
-          x: 14,
-          y: 10,
-        },
-        {
-          x: 18,
-          y: 10,
-        },
-        {
-          x: 23,
-          y: 10,
-        },
-        {
-          x: 24,
-          y: 10,
-        },
-        {
-          x: 37,
-          y: 10,
-        },
-        {
-          x: 38,
-          y: 10,
-        },
-        {
-          x: 3,
-          y: 11,
-        },
-        {
-          x: 4,
-          y: 11,
-        },
-        {
-          x: 13,
-          y: 11,
-        },
-        {
-          x: 19,
-          y: 11,
-        },
-        {
-          x: 23,
-          y: 11,
-        },
-        {
-          x: 24,
-          y: 11,
-        },
-        {
-          x: 3,
-          y: 12,
-        },
-        {
-          x: 4,
-          y: 12,
-        },
-        {
-          x: 13,
-          y: 12,
-        },
-        {
-          x: 17,
-          y: 12,
-        },
-        {
-          x: 19,
-          y: 12,
-        },
-        {
-          x: 20,
-          y: 12,
-        },
-        {
-          x: 25,
-          y: 12,
-        },
-        {
-          x: 27,
-          y: 12,
-        },
-        {
-          x: 13,
-          y: 13,
-        },
-        {
-          x: 19,
-          y: 13,
-        },
-        {
-          x: 27,
-          y: 13,
-        },
-        {
-          x: 14,
-          y: 14,
-        },
-        {
-          x: 18,
-          y: 14,
-        },
-        {
-          x: 15,
-          y: 15,
-        },
-        {
-          x: 16,
-          y: 15,
-        },
-      ]; 
-    setBoard(preset);
+  presetGun=()=> {
+    const presetGun = [[27,7,],[25,8,],[27,8,],[15,9,],[16,9,],[23,9,],[24,9,],[37,9,],[38,9,],[14,10,],[18,10,],[23,10,],[24,10,],[37,10,],[38,10,],[ 3,11,],[ 4,11,],[13,11,],[19,11,],[23,11,],[24,11,],[ 3,12,],[ 4,12,],[13,12,],[17,12,],[19,12,],[20,12,],[25,12,],[27,12,],[13,13,],[19,13,],[27,13,],[14,14,],[18,14,],[15,15,],[16,15,]]; 
+    this.setBoard(presetGun);
   }
 /*
 
@@ -205,18 +58,18 @@ let newBoard = this.makeEmptyBoard();
     this.setState({ cells: this.makeCells() });
 */
 
-  setBoard=(cells)=> {
+  setBoard = (cells) => {
     let newBoard = this.makeEmptyBoard();
-    for (let i = 0; i < cells.length; ++i) {
-        newBoard[cells[i].x][cells[i].y]=true;
+    for (let i = 0; i < cells.length; ++i) { 
+      newBoard[cells[i][1]][cells[i][0]]=true;
     }
     for (let y = 0; y < this.rows; y++) {
         for (let x = 0; x < this.cols; x++) {
-            if (this.board[x][y]!==true){
-                this.board[x][y]=false;
+            if (this.board[y][x]!==true){
+                this.board[y][x]=false;
             }
         }
-    }
+      }
     this.board= newBoard;
     this.setState({ cells: this.makeCells() });
   }
@@ -300,7 +153,7 @@ let newBoard = this.makeEmptyBoard();
           <button className="button" onClick={this.saveGame}>
             Randomize
           </button>
-          <button className="button" onClick={this.preset1}>
+          <button className="button" onClick={this.presetGun}>
             Glider-gun
           </button>
         </div>
