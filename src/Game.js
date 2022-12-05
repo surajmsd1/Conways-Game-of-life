@@ -11,6 +11,7 @@ class Game extends React.Component {
     cells: [],
     interval: 50,
     isRunning: false,
+    brushSize:1,
   };
   constructor() {
     super();
@@ -82,7 +83,9 @@ class Game extends React.Component {
   handleIntervalChange = (event) => {
     this.setState({ interval: event.target.value });
   };
-
+  handleBrushSizeChange = (event) => {
+    this.setState({ brushSize: (parseInt(event.target.value)) });
+  };
   render() {
     const { cells, isRunning } = this.state;
     return (
@@ -134,7 +137,11 @@ class Game extends React.Component {
           </button>{"       "}
         </div>
         <div className="rightCompartment">
-          {"TRY the \"Randomize\" button!"}<br></br>
+          {"Colony Size: "}
+        <input className="BrushSize" 
+            value={this.state.brushSize}
+            onChange={this.handleBrushSizeChange}
+          /><br></br>
           {"TRY changing the \"Update Speed to 20 msec\"!"}
         </div>
         </div>
@@ -196,8 +203,15 @@ class Game extends React.Component {
     const offsetY = event.clientY - elemOffset.y;
     const x = Math.floor(offsetX / CELL_SIZE);
     const y = Math.floor(offsetY / CELL_SIZE);
-    if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
-      this.board[y][x] = !this.board[y][x];
+    const size = this.state.brushSize;
+    for (let col = x; col < (x+size); col++) {
+      for (let row= y; row < (y+size); row++) {
+          console.log(col,row,x+size, y+size);
+          if (col >= 0 && col < this.cols && row >= 0 && row < this.rows) {
+          this.board[row][col] = !this.board[row][col];
+          
+        }
+      }
     }
     this.setState({ cells: this.makeCells() });
   };
