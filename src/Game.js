@@ -1,9 +1,10 @@
 import React from "react";
+import App from "./App";
 import "./Game.css";
 
-const CELL_SIZE = 3;
-const WIDTH = 1200;
-const HEIGHT = 600;
+const CELL_SIZE = 10;
+const WIDTH = window.innerWidth-((window.innerWidth%CELL_SIZE)+20); //I made this
+const HEIGHT = window.innerHeight-((window.innerHeight%CELL_SIZE)+50);
 
 class Game extends React.Component {
   state = {
@@ -36,7 +37,7 @@ class Game extends React.Component {
     console.log(saveCells);
   };
   presetGun=()=> {
-    const presetGun = [[27,7,],[25,8,],[27,8,],[15,9,],[16,9,],[23,9,],[24,9,],[37,9,],[38,9,],[14,10,],[18,10,],[23,10,],[24,10,],[37,10,],[38,10,],[ 3,11,],[ 4,11,],[13,11,],[19,11,],[23,11,],[24,11,],[ 3,12,],[ 4,12,],[13,12,],[17,12,],[19,12,],[20,12,],[25,12,],[27,12,],[13,13,],[19,13,],[27,13,],[14,14,],[18,14,],[15,15,],[16,15,]]; 
+    const presetGun = [[27,7,],[25,8,],[27,8,],[15,9,],[16,9,],[23,9,],[24,9,],[37,9,],[38,9,],[14,10,],[18,10,],[23,10,],[24,10,],[37,10,],[38,10,],[ 3,11,],[ 4,11,],[13,11,],[19,11,],[23,11,],[24,11,],[ 3,12,],[ 4,12,],[13,12,],[17,12,],[19,12,],[20,12,],[25,12,],[27,12,],[13,13,],[19,13,],[27,13,],[14,14,],[18,14,],[15,15,],[16,15,],[66,56],[67,56],[66,57],[68,57],[68,58],[68,59],[69,59 ]]; 
     this.setBoard(presetGun);
   }
   presetOssilator=()=> {
@@ -81,6 +82,7 @@ class Game extends React.Component {
   handleIntervalChange = (event) => {
     this.setState({ interval: event.target.value });
   };
+
   render() {
     const { cells, isRunning } = this.state;
     return (
@@ -101,14 +103,17 @@ class Game extends React.Component {
             <Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
           ))}
         </div>
-
+        
+        <div className="InfoCompartment">
+          <div className="title">{"WELCOME TO CONWAY'S GAME OF LIFE"}<br></br>
+          {"Click to create life and press run to see your colony thrive!"}</div>
         <div className="controls">
           Update every{" "}
           <input
             value={this.state.interval}
             onChange={this.handleIntervalChange}
           />{" "}
-          msec
+          msec {" "}
           {isRunning ? (
             <button className="button" onClick={this.stopGame}>
               Stop
@@ -117,16 +122,21 @@ class Game extends React.Component {
             <button className="button" onClick={this.runGame}>
               Run
             </button>
-          )}
+          )}<br></br>
           <button className="button" onClick={this.randBoard}>
             Randomize
-          </button>
+          </button>{"       "}
           <button className="button" onClick={this.presetGun}>
             Glider-gun
-          </button>
+          </button>{"       "}   
           <button className="button" onClick={this.presetOssilator}>
             Square-Ossilator
-          </button>
+          </button>{"       "}
+        </div>
+        <div className="rightCompartment">
+          {"TRY the \"Randomize\" button!"}<br></br>
+          {"TRY changing the \"Update Speed to 20 msec\"!"}
+        </div>
         </div>
       </div>
     );

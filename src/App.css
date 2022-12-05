@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background-color: grey;
+  
 }
 
 .App-logo {
@@ -35,4 +37,31 @@
   to {
     transform: rotate(360deg);
   }
+}
+.button {
+  background-color: aquamarine;
+  color: black;
+  border: 2px solid grey;
+  
+}
+.button:active{
+  background-color: Aqua;
+}
+.title {
+  float: left;
+  background-color: aqua;
+  height: 55px;
+  width: 33%;
+}
+.controls {
+  float: left;
+  background-color:aquamarine;
+  height: 55px;
+  width: 34%;
+}
+.rightCompartment{
+  float: left;
+  background-color: aqua;
+  height: 55px;
+  width: 33%;
 }
