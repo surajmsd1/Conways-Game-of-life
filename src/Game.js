@@ -1,16 +1,22 @@
 import React from "react";
 import "./Game.css";
 
-const CELL_SIZE = 10;
+const CELL_SIZE = 3;
 const WIDTH = 1200;
 const HEIGHT = 600;
 
 class Game extends React.Component {
   state = {
     cells: [],
-    interval: 100,
+    interval: 50,
     isRunning: false,
   };
+  constructor() {
+    super();
+    this.rows = HEIGHT / CELL_SIZE;
+    this.cols = WIDTH / CELL_SIZE;
+    this.board = this.makeEmptyBoard();
+  }
 
   runGame = () => {
     this.setState({ isRunning: true });
@@ -37,18 +43,11 @@ class Game extends React.Component {
     const presetOssilator = [[36,17],[37,17],[59,17],[60,17],[36,18],[37,18],[59,18],[60,18],[33,20],[34,20],[40,20],[41,20],[42,20],[43,20],[44,20],[52,20],[53,20],[54,20],[55,20],[56,20],[62,20],[63,20],[33,21],[34,21],[39,21],[41,21],[43,21],[45,21],[51,21],[53,21],[55,21],[57,21],[62,21],[63,21],[39,22],[45,22],[51,22],[57,22],[37,23],[38,23],[40,23],[41,23],[42,23],[43,23],[44,23],[52,23],[53,23],[54,23],[55,23],[56,23],[58,23],[59,23],[36,24],[39,24],[57,24],[60,24],[36,25],[37,25],[39,25],[57,25],[59,25],[60,25],[36,26],[39,26],[57,26],[60,26],[36,27],[37,27],[39,27],[57,27],[59,27],[60,27],[36,28],[39,28],[57,28],[60,28],[37,29],[38,29],[58,29],[59,29],[37,35],[38,35],[58,35],[59,35],[36,36],[39,36],[57,36],[60,36],[36,37],[37,37],[39,37],[57,37],[59,37],[60,37],[36,38],[39,38],[57,38],[60,38],[36,39],[37,39],[39,39],[57,39],[59,39],[60,39],[36,40],[39,40],[57,40],[60,40],[37,41],[38,41],[40,41],[41,41],[42,41],[43,41],[44,41],[52,41],[53,41],[54,41],[55,41],[56,41],[58,41],[59,41],[39,42],[45,42],[51,42],[57,42],[33,43],[34,43],[39,43],[41,43],[43,43],[45,43],[51,43],[53,43],[55,43],[57,43],[62,43],[63,43],[33,44],[34,44],[40,44],[41,44],[42,44],[43,44],[44,44],[52,44],[53,44],[54,44],[55,44],[56,44],[62,44],[63,44],[36,46],[37,46],[59,46],[60,46],[36,47],[37,47],[59,47],[60,47]];
     this.setBoard(presetOssilator);
   }
-  setBoard = (cells) => {
+  setBoard = (preset) => {
     let newBoard = this.makeEmptyBoard();
-    for (let i = 0; i < cells.length; ++i) { 
-      newBoard[cells[i][1]][cells[i][0]]=true;
+    for (let i = 0; i < preset.length; ++i) { 
+      newBoard[preset[i][1]][preset[i][0]]=true;
     }
-    for (let y = 0; y < this.rows; y++) {
-        for (let x = 0; x < this.cols; x++) {
-            if (this.board[y][x]!==true){
-                this.board[y][x]=false;
-            }
-        }
-      }
     this.board= newBoard;
     this.setState({ cells: this.makeCells() });
   }
@@ -56,7 +55,6 @@ class Game extends React.Component {
   runIteration() {
     console.log("running iteration");
     let newBoard = this.makeEmptyBoard();
-
     for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
         let neighbors = this.calculateNeighbors(this.board, x, y);
@@ -73,7 +71,6 @@ class Game extends React.Component {
         }
       }
     }
-
     this.board = newBoard;
     this.setState({ cells: this.makeCells() });
     this.timeoutHandler = window.setTimeout(() => {
@@ -84,14 +81,6 @@ class Game extends React.Component {
   handleIntervalChange = (event) => {
     this.setState({ interval: event.target.value });
   };
-
-  constructor() {
-    super();
-    this.rows = HEIGHT / CELL_SIZE;
-    this.cols = WIDTH / CELL_SIZE;
-    this.board = this.makeEmptyBoard();
-  }
-
   render() {
     const { cells, isRunning } = this.state;
     return (
@@ -104,7 +93,7 @@ class Game extends React.Component {
             backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`,
           }}
           onClick={this.handleClick}
-          ref={(n) => {
+          ref={(n) => { // the new way to create ref is React.createRef() this must be the old way. 
             this.boardRef = n;
           }}
         >
@@ -129,7 +118,7 @@ class Game extends React.Component {
               Run
             </button>
           )}
-          <button className="button" onClick={this.saveGame}>
+          <button className="button" onClick={this.randBoard}>
             Randomize
           </button>
           <button className="button" onClick={this.presetGun}>
@@ -143,14 +132,18 @@ class Game extends React.Component {
     );
   }
 
-  // randBoard(){
-  //     for (let y = 0; y < this.rows; y++) {
-  //         board[y] = [];
-  //         for (let x = 0; x < this.cols; x++) {
-  //             board[y][x] = false;
-  //         }
-  //     }
-  // }
+  randBoard=()=>{
+    let newBoard = this.makeEmptyBoard();
+      for (let y = 0; y < this.rows; y++) {
+          for (let x = 0; x < this.cols; x++) {
+            if(Math.floor(Math.random() + .5)){
+              newBoard[y][x] = true;
+            }
+          }
+      }
+      this.board = newBoard;
+      this.setState({cells: this.makeCells()});
+  }
 
   // Create an empty board for initalizing when new board needs to be made ex: change size of board or cell size
   makeEmptyBoard() {
@@ -186,6 +179,7 @@ class Game extends React.Component {
       y: rect.top + window.pageYOffset - doc.clientTop,
     };
   }
+
   handleClick = (event) => {
     const elemOffset = this.getElementOffset();
     const offsetX = event.clientX - elemOffset.x;
